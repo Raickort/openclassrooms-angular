@@ -12,6 +12,7 @@ export class PostComponent implements OnInit {
   @Input() postLike: boolean;
   @Input() postCreatedAt: Date;
   @Input() indexOfPost: number;
+  @Input() id: number;
 
   constructor(private postService: PostService) {}
 

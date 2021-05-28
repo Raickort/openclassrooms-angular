@@ -2,7 +2,8 @@
 <div style=padding:10px;>
   <ul class="list-group">
     <app-post *ngFor="let post of posts; let i = index" [postTitle]="post.title" [postContent]="post.content"
-      [postLike]="post.like" [postCreatedAt]="post.createdAt" [indexOfPost]="i">
+      [postLike]="post.like" [postCreatedAt]="post.createdAt" [indexOfPost]="i"
+      [id]="post.id">
     </app-post>
   </ul>
 </div>
