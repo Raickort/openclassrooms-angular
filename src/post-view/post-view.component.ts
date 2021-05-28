@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { PostService } from '../service/post.service';
 
 @Component({
@@ -8,9 +9,14 @@ import { PostService } from '../service/post.service';
 })
 export class PostViewComponent implements OnInit {
   posts: any[];
+  postSubscription = new Subscription();
+
   constructor(private postService: PostService) {}
   ngOnInit() {
-    this.posts = this.postService.posts;
+    this.posts = this.postService.postSubject.subscribe((posts: any[]) => {
+      this.posts = posts;
+    });
+    this.postService.emitPostSubject();
   }
 
   onLikeAll() {
