@@ -12,12 +12,14 @@ import { PostService } from '../service/post.service';
 import { AuthService } from '../service/auth.service';
 
 import { RouterModule, Routes } from '@angular/router';
+import { SinglePostComponent } from '../single-post/single-post.component';
 
 
 const appRoutes: Routes = [
   { path: 'posts', component: PostViewComponent },
   { path: 'auth', component: AuthComponent },
-  { path: '', component: PostViewComponent }
+  { path: '', component: PostViewComponent },
+  { path: 'post/:id', component: SinglePostComponent}
 ];
 
 @NgModule({
@@ -27,7 +29,8 @@ const appRoutes: Routes = [
     HelloComponent,
     PostComponent,
     AuthComponent,
-    PostViewComponent
+    PostViewComponent,
+    SinglePostComponent,
   ],
   bootstrap: [AppComponent],
   providers: [PostService, AuthService]

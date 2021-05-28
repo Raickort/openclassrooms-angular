@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from '../service/auth.service';
 
 @Component({
@@ -9,19 +10,17 @@ import { AuthService } from '../service/auth.service';
 export class AuthComponent implements OnInit {
   authStatus: boolean;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
     this.authStatus = this.authService.isAuth;
   }
 
   onSignIn() {
-    this.authService.signIn().then(
-      () => {
-        console.log("Connexion réussie");
-        this.authStatus = this.authService.isAuth;
-      }
-    );
+    this.authService.signIn().then(() => {
+      this.authStatus = this.authService.isAuth;
+      this.router.navigate(['posts']);
+    });
   }
 
   onSignOut() {
