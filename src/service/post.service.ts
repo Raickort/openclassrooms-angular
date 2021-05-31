@@ -1,42 +1,14 @@
+import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
+@Injectable()
 export class PostService {
   postSubject = new Subject<any[]>();
 
-  private posts = [
-    {
-      id: 1,
-      title: "Harry Potter à l'école des sorciers",
-      content:
-        ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce hendrerit libero sit amet vehicula lobortis. Etiam nulla magna, commodo et ipsum ut, molestie elementum augue. Donec sagittis molestie ullamcorper. Nullam a urna id ligula scelerisque lobortis sed et nunc. Donec id erat mollis, aliquet ante non, faucibus mi. Pellentesque elit metus, molestie semper risus at, condimentum dignissim magna. In hac habitasse platea dictumst. Phasellus quis augue metus. Quisque pellentesque, ante in mollis ullamcorper, nulla est cursus ipsum, a ornare libero nibh non metus. Nam posuere venenatis velit, quis volutpat ligula laoreet id. Vivamus consequat, mi at commodo dictum, ligula ligula efficitur nulla, eu pulvinar urna est ut neque. Cras at rhoncus ex. Duis varius, odio ut faucibus tincidunt, nulla urna varius magna, vitae tempor arcu magna in dui. Curabitur eu suscipit dui',
-      like: true,
-      createdAt: new Date('2021-05-28')
-    },
-    {
-      id: 2,
-      title: 'Harry Potter et la chambre des secrets',
-      content:
-        'Sed maximus sit amet ex volutpat cursus. Curabitur eget purus aliquam justo tristique feugiat id quis erat. Suspendisse congue eros id erat egestas egestas. Mauris at diam ante. Fusce euismod a nunc et cursus. Ut sit amet erat pellentesque, pretium eros eget, viverra erat. Nulla quis volutpat ante. Aliquam lobortis sollicitudin ornare. Maecenas ullamcorper, magna venenatis rhoncus rutrum, velit elit ultrices purus, ut m',
-      like: true,
-      createdAt: new Date('2021-03-20')
-    },
-    {
-      id: 3,
-      title: "Harry Potter et le prisonnier d'Azkaban",
-      content:
-        'raesent gravida nibh sed ornare rutrum. Fusce nisi sem, pharetra in est sollicitudin, malesuada mattis magna. Sed ultricies at ipsum vitae dictum. Nam facilisis orci eget sapien tristique, at sagittis augue semper. Vestibulum vel cursus odio. Cras imperdiet volutpat eros, vitae euismod lacus tristique eu. Fusce quis lectus eu mi pharetra dictum. Etiam ullamcorper justo non convallis viverra. Quisque fermentum felis auctor sollicitudin dignissim. Proin in ipsum hendrerit, vehicula nibh eu, posuere lorem. Sed imperdiet aliquam feugiat. Aliquam dignissim lectus ut orci vestibulum, congue consequat orci efficitur. ',
-      like: false,
-      createdAt: new Date('2021-01-01')
-    },
-    {
-      id: 4,
-      title: 'Harry Potter et la coupe de feu',
-      content:
-        'Ut aliquet ut ex ut rutrum. Fusce vel augue eget nisl congue sollicitudin. In hac habitasse platea dictumst. Ut interdum porttitor sodales. Aenean eget est nisl. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Phasellus semper orci at ante porta, ac interdum lectus viverra. Suspendisse potenti. Cras nibh libero, imperdiet pellentesque tincidunt non, consequat in purus. Morbi pellentesque purus non consectetur blandit. ',
-      like: true,
-      createdAt: new Date('2020-10-13')
-    }
-  ];
+  private posts = [];
+
+  constructor(private httpClient: HttpClient) {}
 
   emitPostSubject() {
     this.postSubject.next(this.posts.slice());
@@ -87,5 +59,37 @@ export class PostService {
     postObject.id = this.posts[this.posts.length - 1].id + 1;
     this.posts.push(postObject);
     this.emitPostSubject();
+  }
+
+  saveAppareilsToServer() {
+    this.httpClient
+      .put(
+        'https://angularclassrooms-default-rtdb.europe-west1.firebasedatabase.app/posts.json',
+        this.posts
+      )
+      .subscribe(
+        () => {
+          console.log('Enregistrement terminé !');
+        },
+        error => {
+          console.log('Erreur ! : ' + error);
+        }
+      );
+  }
+
+  getPostsFromServeur() {
+    this.httpClient
+      .get<any[]>(
+        'https://angularclassrooms-default-rtdb.europe-west1.firebasedatabase.app/posts.json'
+      )
+      .subscribe(
+        response => {
+          this.posts = response;
+          this.emitPostSubject();
+        },
+        error => {
+          console.log('Erreur de chargement !' + error);
+        }
+      );
   }
 }

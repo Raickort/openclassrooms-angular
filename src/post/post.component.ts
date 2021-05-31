@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Injectable, Input, OnInit } from '@angular/core';
 import { PostService } from '../service/post.service';
 
 @Component({
@@ -6,6 +6,7 @@ import { PostService } from '../service/post.service';
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.css']
 })
+
 export class PostComponent implements OnInit {
   @Input() postTitle: String;
   @Input() postContent: String;
